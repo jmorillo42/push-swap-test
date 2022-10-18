@@ -29,7 +29,7 @@ CYAN = '\033[1;36m'
 GRAY = '\033[1;30m'
 RESET = '\033[0m'
 
-PUSH_SWAP = '../push_swap'
+PUSH_SWAP = '../push-swap/push_swap'
 
 if os.uname().sysname == 'Darwin':
     CHECKER = './checker_Mac'
