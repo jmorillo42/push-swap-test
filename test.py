@@ -30,13 +30,17 @@ GRAY = '\033[1;30m'
 RESET = '\033[0m'
 
 PUSH_SWAP = '../push-swap/push_swap'
+if not os.path.exists(PUSH_SWAP):
+    print(f'No existe "push_swap"')
+    exit()
 
-if os.uname().sysname == 'Darwin':
+system_name = os.uname().sysname;
+if system_name == 'Darwin':
     CHECKER = './checker_Mac'
-elif os.uname().sysname == 'Linux':
+elif system_name == 'Linux':
     CHECKER = './checker_linux'
 else:
-    print(f'No existe "checker" para {os.uname().sysname}')
+    print(f'No existe "checker" para {system_name}')
     exit()
 
 TESTS=[
