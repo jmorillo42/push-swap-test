@@ -30,6 +30,9 @@ GRAY = '\033[1;30m'
 RESET = '\033[0m'
 
 PUSH_SWAP = '../push-swap/push_swap'
+if not os.path.exists(PUSH_SWAP):
+    print(f'No existe el comando "{PUSH_SWAP}"')
+    exit()
 
 if os.uname().sysname == 'Darwin':
     CHECKER = './checker_Mac'
@@ -43,27 +46,37 @@ TESTS=[
 [],
 [''],
 [' '],
+['+'],
 ['-'],
-['42',],
-['-42'],
+[42,],
+[-42],
 ['+42'],
 ['-+42'],
 ['--42'],
+['+-42'],
 ['-42-'],
 ['-42A'],
-['A'],
-['1', '', '2'],
-['FOOBAR'],
-['2147483647'],
-['2147483648'],
-['6442450943'],
-['-2147483648'],
-['000000000000000000000000000042', '12'],
+['000000000000000000000000000042'],
+['+000000000000000000000000000042'],
+['-000000000000000000000000000042'],
+[2147483647],
+[2147483648],
+[-2147483648],
+[-2147483649],
+[6442450943],
+[12345678901234567890123456789],
+['+12345678901234567890123456789'],
 ['-12345678901234567890123456789'],
-['12345678901234567890123456789'],
-['3', '2', '6 5 4', '1'],
-['3', '2', '6 5 A', '1'],
-['-19', '-17', '-13', '-11', '-7', '-5', '-3', '-2', '2', '3', '5', '7', '11', '13', '17', '19']
+['A'],
+['FOOBAR'],
+['000000000000000000000000000042', '0000000000000000000000000000'],
+['+000000000000000000000000000042', '+0000000000000000000000000000'],
+['-000000000000000000000000000042', '-0000000000000000000000000000'],
+[1, '', 2],
+['3 2 6 5 4 1'],
+[3, 2, '6 5 4', 1],
+[3, 2, '6 5 A', 1],
+[-19, -17, -13, -11, -7, -5, -3, -2, 2, 3, 5, 7, 11, 13, 17, 19]
 ]
 
 
@@ -249,13 +262,13 @@ def print_random_numbers(length, count, rating=True):
 def main():
     print()
     for numbers in TESTS:
-        moves, error, check = sort_numbers(numbers)
+        moves, error, check = sort_numbers([str(n) for n in numbers])
         if check == 'OK' or (check == 'Error' and error) or (check == '' and not error and not moves):
             check = f'[{GREEN}OK{RESET}]'
         else:
             check = f'[{RED}KO{RESET}]'
         moves = f'{MAGENTA}{moves}{RESET}' if not error else f'{CYAN}Error{RESET}'
-        numbers = [f'{BLUE}{n}{RESET}' for n in numbers]
+        numbers = [f'{BLUE}{n}{RESET}' if isinstance(n, int) else f'{BLUE}“{n}”{RESET}' for n in numbers]
         print(f'push_swap({", ".join(numbers)}) --> {moves} {check}')
     print()
     print_all_comb_numbers(3)
@@ -275,8 +288,8 @@ def main():
     print_random_numbers(32, 60)
     print_random_numbers(64, 40)
     print_random_numbers(256, 20)
-    print_random_numbers(1024, 10)
-    print_random_numbers(5000, 2)
+    #print_random_numbers(1024, 10)
+    #print_random_numbers(5000, 2)
     print()
     print_comb_numbers(3)
     print_comb_numbers(5)
