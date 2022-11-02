@@ -8,7 +8,7 @@
 #    By: jmorillo <jmorillo@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/08/16 15:14:35 by jmorillo          #+#    #+#              #
-#    Updated: 2022/11/02 14:04:14 by jmorillo         ###   ########.fr        #
+#    Updated: 2022/11/02 14:31:14 by jmorillo         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -29,8 +29,8 @@ CYAN = '\033[1;36m'
 GRAY = '\033[1;30m'
 RESET = '\033[0m'
 
-# print(f'{YELLOW}Tests {RED}closed{YELLOW} for renovations{RESET}')
-# exit(0)
+print(f'{YELLOW}Tests {RED}closed{YELLOW} for renovations{RESET}')
+exit(0)
 
 COMMAND_NOT_FOUND = 'Error: Command “{}” not found'
 OPSYS_INVALID = 'Error: There is no checker for the operating system “{}”'
