@@ -8,7 +8,7 @@
 #    By: jmorillo <jmorillo@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/08/16 15:14:35 by jmorillo          #+#    #+#              #
-#    Updated: 2022/11/02 14:31:14 by jmorillo         ###   ########.fr        #
+#    Updated: 2022/11/02 15:51:15 by jmorillo         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -29,8 +29,8 @@ CYAN = '\033[1;36m'
 GRAY = '\033[1;30m'
 RESET = '\033[0m'
 
-print(f'{YELLOW}Tests {RED}closed{YELLOW} for renovations{RESET}')
-exit(0)
+#print(f'{YELLOW}Tests {RED}closed{YELLOW} for renovations{RESET}')
+#exit(0)
 
 COMMAND_NOT_FOUND = 'Error: Command “{}” not found'
 OPSYS_INVALID = 'Error: There is no checker for the operating system “{}”'
@@ -101,17 +101,19 @@ TESTS=[
 ]
 
 def main():
-    print('Tests for push-swap project (by jmorillo)')
+    print('┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓')
+    print('┃  Tests for push-swap project  ┃')
+    print('┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛')
     print()
     print_input_output_tests()
     print()
     print('COMBINATIONS OF N NUMBERS')
     print(' Show all')
-    print(f' {GRAY}[OK] push_swap(INPUT) = [MOVEMENTS ; ERROR ; RETURN CODE]{RESET}')
     print_all_comb_numbers(3)
     #print_all_comb_numbers(4)
     #print_all_comb_numbers(5)
-    print(' Only results')
+    print()
+    print(' Only stats')
     print_comb_numbers(2)
     print_comb_numbers(3)
     print_comb_numbers(4)
@@ -119,10 +121,12 @@ def main():
     #print_comb_numbers(6)
     print()
     print('SEQUENCES OF N NUMBERS')
+    print(f' {GRAY}[OK] N=××× --> AVERAGE [MIN-MAX]{RESET}')
     print_sequence_numbers(100)
     print_sequence_numbers(500)
     print()
     print('T ITERATIONS OF N RANDOM NUMBERS')
+    print(f' {GRAY}[OK] N=××× (T=×××) --> AVERAGE [MIN-MAX]{RESET}')
     print_random_numbers(6, 80)
     print_random_numbers(8, 80)
     print_random_numbers(16, 80)
@@ -138,44 +142,44 @@ def main():
 
 def print_input_output_tests():
     print('INPUT/OUTPUT')
-    print(f'{GRAY}[OK] push_swap(INPUT) = [MOVEMENTS ; ERROR ; RETURN CODE]{RESET}')
+    print(f'{GRAY}[OK] push_swap(INPUT) = [MOVEMENTS ; ERROR ; RETURN_CODE]{RESET}')
     for numbers in TESTS:
         result, actions, ps_err, ps_code = sort_and_check(numbers)
         ok = ok_ko_string(result)
         numbers = [f'{BLUE}{n}{RESET}' if isinstance(n, int) else f'{BLUE}“{n}”{RESET}' for n in numbers]
         actions = f'{MAGENTA}{actions}{RESET}'
-        ps_err = f'{MAGENTA}{ps_err}{RESET}'
+        ps_err = f'{MAGENTA}{ps_err if ps_err else "✓"}{RESET}'
         ps_code = f'{MAGENTA}{ps_code}{RESET}'
         sep = f'{GRAY};{RESET}'
         print(f'{ok} push_swap({", ".join(numbers)}) = [{actions} {sep} {ps_err} {sep} {ps_code}]')
 
 def print_all_comb_numbers(length):
     combinations = calc_comb_numbers(length)
-    print(f'  N={length}')
+    print(f'  N={BLUE}{length}{RESET}')
     for numbers in combinations:
         result, actions, ps_err, ps_code = sort_and_check(numbers)
         ok = ok_ko_string(result)
         numbers = [f'{BLUE}{n}{RESET}' if isinstance(n, int) else f'{BLUE}“{n}”{RESET}' for n in numbers]
         actions = f'{MAGENTA}{actions}{RESET}'
-        ps_err = f'{MAGENTA}{ps_err}{RESET}'
+        ps_err = f'{MAGENTA}{ps_err if ps_err else "✓"}{RESET}'
         ps_code = f'{MAGENTA}{ps_code}{RESET}'
         sep = f'{GRAY};{RESET}'
         print(f'  {ok} push_swap({", ".join(numbers)}) = [{actions} {sep} {ps_err} {sep} {ps_code}]')
 
 def print_comb_numbers(length, rating=True):
-    meanm, minm, maxm = sort_test_numbers(calc_comb_numbers(length))
-    rating = calc_rating(length, [meanm, minm, maxm]) if rating else ''
-    print(f'  {BLUE}N={length}{RESET} --> {MAGENTA}{meanm:.2f}{RESET} [{GREEN}{minm}{RESET}-{RED}{maxm}{RESET}]{rating}')
+    ok, avgm, minm, maxm = sort_and_stats(calc_comb_numbers(length))
+    rating = calc_rating(length, [avgm, minm, maxm]) if rating else ''
+    print(f'  {ok_ko_string(ok)} N={BLUE}{length}{RESET} --> {MAGENTA}{avgm:.2f}{RESET} [{GREEN}{minm}{RESET}-{RED}{maxm}{RESET}]{rating}')
 
 def print_sequence_numbers(length, rating=True):
-    meanm, minm, maxm = sort_test_numbers(calc_sequence_numbers(length))
-    rating = calc_rating(length, [meanm, minm, maxm]) if rating else ''
-    print(f' {BLUE}N={length}{RESET} --> {MAGENTA}{meanm:.1f}{RESET} [{GREEN}{minm}{RESET}-{RED}{maxm}{RESET}]{rating}')
+    ok, avgm, minm, maxm = sort_and_stats(calc_sequence_numbers(length))
+    rating = calc_rating(length, [avgm, minm, maxm]) if rating else ''
+    print(f' {ok_ko_string(ok)} N={BLUE}{length:3d}{RESET} --> {MAGENTA}{avgm:.1f}{RESET} [{GREEN}{minm}{RESET}-{RED}{maxm}{RESET}]{rating}')
 
 def print_random_numbers(length, count, rating=True):
-    meanm, minm, maxm = sort_test_numbers(calc_random_numbers(length, count))
-    rating = calc_rating(length, [meanm, minm, maxm]) if rating else ''
-    print(f' {BLUE}N={length} (T={count}){RESET} --> {MAGENTA}{meanm:.1f}{RESET} [{GREEN}{minm}{RESET}-{RED}{maxm}{RESET}]{rating}')
+    ok, avgm, minm, maxm = sort_and_stats(calc_random_numbers(length, count))
+    rating = calc_rating(length, [avgm, minm, maxm]) if rating else ''
+    print(f' {ok_ko_string(ok)} N={BLUE}{length:3d}{RESET} (T={BLUE}{count:3d}{RESET}) --> {MAGENTA}{avgm:6.1f}{RESET} [{GREEN}{minm:3d}{RESET}-{RED}{maxm:3d}{RESET}]{rating}')
 
 def sort_numbers(numbers: list) -> tuple:
     numbers = [str(n) for n in numbers]
@@ -234,6 +238,22 @@ def ok_ko_string(result: bool) -> str:
         return f'[{GREEN}OK{RESET}]'
     else:
         return f'[{RED}KO{RESET}]'
+
+def sort_and_stats(numbers_list: list):
+    total_moves = 0
+    min_moves = -1
+    max_moves = -1
+    for numbers in numbers_list:
+        result, count, ps_err, ps_code = sort_and_check(numbers)
+        if not result:
+            break
+        total_moves += count
+        if count > max_moves:
+            max_moves = count
+        if count < min_moves or min_moves < 0:
+            min_moves = count
+    avg_moves = total_moves / len(numbers_list)
+    return result, avg_moves, min_moves, max_moves
 
 def points_3(moves):
     result = []
@@ -312,17 +332,22 @@ def calc_comb_numbers(length):
     return result
 
 def calc_sequence_numbers(length):
-    numbers = [str(n) for n in range(1, length + 1)]
+    numbers = list(range(1, length + 1))
     result = list()
     result.append(numbers.copy())
     rev = numbers.copy()
     rev.reverse()
     result.append(rev)
-    asc = list(range(1, length + 1, 2))
-    des = list(range(2, length + 1, 2))
-    des.reverse()
-    result.append(asc + des)
-    result.append(des + asc)
+    asc1 = list(range(1, length + 1, 2))
+    asc2 = list(range(2, length + 1, 2))
+    des1 = asc1.copy()
+    des1.reverse()
+    des2 = asc2.copy()
+    des2.reverse()
+    result.append(asc1 + asc2)
+    result.append(asc1 + des2)
+    result.append(des1 + asc2)
+    result.append(des1 + des2)
     return result
 
 def calc_random_numbers(length, count):
@@ -334,25 +359,6 @@ def calc_random_numbers(length, count):
         result.append(numbers.copy())
         count -= 1
     return result
-
-def sort_test_numbers(tests: list, check=True):
-    total_moves = 0
-    min_moves = sys.maxsize
-    max_moves = 0
-    for numbers in tests:
-        actions, ps_err, ps_code, chk_out, chk_err, chk_code = sort_numbers(numbers, check)
-        if ps_err or chk_out != 'OK':
-            total_moves = 0
-            min_moves = -1
-            max_moves = -1
-            break
-        total_moves += actions
-        if actions > max_moves:
-            max_moves = actions
-        if actions < min_moves:
-            min_moves = actions
-    mean_moves = total_moves / len(tests)
-    return mean_moves, min_moves, max_moves
 
 def calc_rating(length, moves):
     if moves[1] < 0:
