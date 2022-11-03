@@ -11,4 +11,4 @@
 - En la línea 63 se define la batería de pruebas. Se puede editar añadiendo o eliminando líneas. El formato es:
     `[NÚMERO_O_TEXTO, NÚMERO_O_TEXTO, ... ],`
 - En la línea 107 se define el procedimiento principal `main`. Se puede editar añadiendo o eliminando casos. Por ejemplo, para añadir una pila de 20 números aleatorios que se lance 10 veces se añadiría una línea con:
-    `print_random_numbers(20, 20)`
+    `print_random_numbers(20, 10)`
