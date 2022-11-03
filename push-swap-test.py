@@ -20,15 +20,17 @@ import subprocess
 import sys
 import time
 
-RED = '\033[31m'
+from config import PUSH_SWAP, CHECKER, INPUT_TESTS, COMB_ALL_TESTS, COMB_STAT_TESTS, SEQ_TESTS, RANDOM_TESTS
+
+RED = '\033[0;31m'
 LRED = '\033[1;31m'
-GREEN = '\033[32m'
+GREEN = '\033[0;32m'
 LGREEN = '\033[1;32m'
-BLUE = '\033[34m'
+BLUE = '\033[0;34m'
 LBLUE = '\033[1;34m'
-YELLOW = '\033[1;33m'
-MAGENTA = '\033[1;35m'
 CYAN = '\033[1;36m'
+MAGENTA = '\033[1;35m'
+YELLOW = '\033[1;33m'
 GRAY = '\033[1;30m'
 WHITE = '\033[1;37m'
 RESET = '\033[0m'
@@ -41,68 +43,25 @@ OPSYS_INVALID = 'Error: There is no checker for the operating system “{}”'
 INVALID_OUTPUT = 'The action “{}” is not valid'
 CRASH = 'push_swap terminated unexpectedly: “{}”'
 
-PUSH_SWAP = '../push-swap/push_swap'
 if not os.path.exists(PUSH_SWAP):
     print(COMMAND_NOT_FOUND.format(PUSH_SWAP))
     exit(1)
 
 if os.uname().sysname == 'Darwin':
-    CHECKER = './checker_Mac'
+    CHECKER_42 = './checker_Mac'
 elif os.uname().sysname == 'Linux':
-    CHECKER = './checker_linux'
+    CHECKER_42 = './checker_linux'
 else:
     print(OPSYS_INVALID.format(os.uname().sysname))
     exit(1)
 
-if not os.path.exists(CHECKER):
-    print(COMMAND_NOT_FOUND.format(CHECKER))
+if not os.path.exists(CHECKER_42):
+    print(COMMAND_NOT_FOUND.format(CHECKER_42))
     exit(1)
 
-ACTIONS = ('pa', 'pb', 'ra', 'rb', 'rr', 'rra', 'rrb', 'rrr', 'sa', 'sb', 'ss')
+NO_CHECKER = not os.path.exists(CHECKER)
 
-TESTS=[
-[],
-[''],
-[' '],
-['+'],
-['-'],
-[0,],
-['-0',],
-['+0',],
-[' 0',],
-[42,],
-[-42],
-['+42'],
-['-+42'],
-['--42'],
-['+-42'],
-['++42'],
-['-42-'],
-['-42A'],
-['00000000000000000000042'],
-[' 00000000000000000000042'],
-['+00000000000000000000042'],
-['-00000000000000000000042'],
-[2147483647],
-[2147483648],
-[-2147483648],
-[-2147483649],
-[6442450943],
-[12345678901234567890],
-['+12345678901234567890'],
-['-12345678901234567890'],
-[' 12345678901234567890'],
-['A'],
-['FOOBAR'],
-['00000000000000000000042', '000000000000000000000'],
-['+00000000000000000000042', '+000000000000000000000'],
-['-00000000000000000000042', '-000000000000000000000'],
-[1, '', 2],
-[' 3 2 6 5 4 1 '],
-[3, 2, '6 5 4', 1],
-[3, 2, '6 5 A', 1],
-[-19, -17, -13, -11, -7, -5, -3, -2, -0, 2, 3, 5, 7, 11, 13, 17, 19]
-]
+ACTIONS = ('pa', 'pb', 'ra', 'rb', 'rr', 'rra', 'rrb', 'rrr', 'sa', 'sb', 'ss')
 
 def main():
     print(f'{RED}┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓{RESET}')
@@ -116,42 +75,29 @@ def main():
     print(f'{WHITE}COMBINATIONS OF N NUMBERS{RESET}')
     print(' Show all')
     print(f'  {GRAY}[OK] push_swap(INPUT) = MOVEMENTS ; STDERR (RETURN_CODE){RESET}')
-    print_all_comb_numbers(3)
-    #print_all_comb_numbers(4)
-    #print_all_comb_numbers(5)
+    for n in COMB_ALL_TESTS:
+        print_all_comb_numbers(n)
     print()
     print(' Only stats')
     print(f'  {GRAY}[OK] N=# --> AVERAGE [MIN - MAX]  POINTS   AVG_TIME{RESET}')
-    print_comb_numbers(2)
-    print_comb_numbers(3)
-    print_comb_numbers(4)
-    print_comb_numbers(5)
+    for n in COMB_STAT_TESTS:
+        print_comb_numbers(n)
     print()
     print(f'{WHITE}SEQUENCES OF N NUMBERS{RESET}')
     print(f' {GRAY}[OK] N=### --> AVERAGE [  MIN -   MAX]  POINTS   AVG_TIME{RESET}')
-    print_sequence_numbers(50)
-    print_sequence_numbers(100)
-    print_sequence_numbers(250)
-    print_sequence_numbers(500)
+    for n in SEQ_TESTS:
+        print_sequence_numbers(n)
     print()
     print(f'{WHITE}T ITERATIONS OF N RANDOM NUMBERS{RESET}')
     print(f' {GRAY}[OK] N=### (T=###) --> AVERAGE [  MIN -   MAX]  POINTS   AVG_TIME{RESET}')
-    print_random_numbers(6, 80)
-    print_random_numbers(10, 70)
-    print_random_numbers(15, 60)
-    print_random_numbers(25, 50)
-    print_random_numbers(50, 40)
-    print_random_numbers(80, 30)
-    print_random_numbers(100, 100)
-    print_random_numbers(125, 20)
-    print_random_numbers(250, 20)
-    print_random_numbers(500, 50)
-    #print_random_numbers(1000, 10)
-    #print_random_numbers(5000, 2)
+    for n, t in RANDOM_TESTS:
+        print_random_numbers(n, t)
     print()
+    #print(f'{WHITE}BONUS{RESET}')
+    #print()
 
 def print_input_output_tests() -> None:
-    for numbers in TESTS:
+    for numbers in INPUT_TESTS:
         result, actions, ps_err, ps_code = sort_and_check(numbers)
         print_push_swap_results(numbers, result, actions, ps_err, ps_code)
 
@@ -164,17 +110,17 @@ def print_all_comb_numbers(length: int) -> None:
 def print_comb_numbers(length: int) -> None:
     ok, avgm, minm, maxm, exec_time = sort_and_stats(calc_comb_numbers(length))
     points = evaluation_points(length, [avgm, minm, maxm])
-    print(f'  {ok_ko_string(ok)} N={LBLUE}{length}{RESET} --> {CYAN}{avgm:7.2f}{RESET} [{LGREEN}{minm:3d}{RESET} - {LRED}{maxm:3d}{RESET}]  {points}  {BLUE}{exec_time:6.2f}ms{RESET}')
+    print(f'  {ok_ko_string(ok)} N={LBLUE}{length}{RESET} --> {CYAN}{avgm:7.2f}{RESET} [{LGREEN}{minm:3d}{RESET} - {LRED}{maxm:3d}{RESET}]  {points}  {exec_time:6.2f}ms')
 
 def print_sequence_numbers(length: int) -> None:
     ok, avgm, minm, maxm, exec_time = sort_and_stats(calc_sequence_numbers(length))
     points = evaluation_points(length, [avgm, minm, maxm])
-    print(f' {ok_ko_string(ok)} N={LBLUE}{length:3d}{RESET} --> {CYAN}{avgm:7.1f}{RESET} [{LGREEN}{minm:5d}{RESET} - {LRED}{maxm:5d}{RESET}]  {points}  {BLUE}{exec_time:6.2f}ms{RESET}')
+    print(f' {ok_ko_string(ok)} N={LBLUE}{length:3d}{RESET} --> {CYAN}{avgm:7.1f}{RESET} [{LGREEN}{minm:5d}{RESET} - {LRED}{maxm:5d}{RESET}]  {points}  {exec_time:6.2f}ms')
 
 def print_random_numbers(length: int, iterations: int) -> None:
     ok, avgm, minm, maxm, exec_time = sort_and_stats(calc_random_numbers(length, iterations))
     points = evaluation_points(length, [avgm, minm, maxm])
-    print(f' {ok_ko_string(ok)} N={LBLUE}{length:3d}{RESET} (T={LBLUE}{iterations:3d}{RESET}) --> {CYAN}{avgm:7.1f}{RESET} [{LGREEN}{minm:5d}{RESET} - {LRED}{maxm:5d}{RESET}]  {points}  {BLUE}{exec_time:6.2f}ms{RESET}')
+    print(f' {ok_ko_string(ok)} N={LBLUE}{length:3d}{RESET} (T={LBLUE}{iterations:3d}{RESET}) --> {CYAN}{avgm:7.1f}{RESET} [{LGREEN}{minm:5d}{RESET} - {LRED}{maxm:5d}{RESET}]  {points}  {exec_time:6.2f}ms')
 
 def sort_numbers(numbers: list) -> tuple:
     numbers = [str(n) for n in numbers]
@@ -196,7 +142,7 @@ def sort_numbers(numbers: list) -> tuple:
 
 def check_actions(numbers: list, actions: str) -> tuple:
     numbers = [str(n) for n in numbers]
-    chk_command = [CHECKER] + numbers
+    chk_command = [CHECKER_42] + numbers
     chk_process = subprocess.run(chk_command, capture_output=True, text=True, input=actions)
     chk_output = chk_process.stdout.strip()
     chk_error = chk_process.stderr.strip()

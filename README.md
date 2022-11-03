@@ -3,12 +3,19 @@
 ## Instalación
 
 1. Clonar el repositorio
-2. Editar el archivo `push-swap-test.py` y modificar la línea 44. Sustituir el valor por la ruta donde se encuentra `push_swap`.
+2. Editar el archivo `config.py` y modificar la línea 2. Sustituir el valor por la ruta donde se encuentra `push_swap`.
 3. Lanzar en la terminal con `./push-swap-test.py` o bien `python3 push-swap-test.py`.
 
 ## Personalización
 
-- En la línea 63 se define la batería de pruebas. Se puede editar añadiendo o eliminando líneas. El formato es:
-    `[NÚMERO/TEXTO, NÚMERO/TEXTO, ... ],`
-- En la línea 107 se define el procedimiento principal `main`. Se puede editar añadiendo o eliminando casos. Por ejemplo, para añadir una pila de 20 números aleatorios que se lance 10 veces se añadiría una línea con:
-    `print_random_numbers(20, 10)`
+En el fichero `config.py` están definidas las constantes que se utilizarán para los tests:
+
+- PUSH_SWAP: Ruta del comando `push_swap`
+- CHECKER: Ruta del comando `checker` (AVISO: no está implementado aún el test del bonus)
+- INPUT_TESTS: Colección de pruebas de entrada. Se verifican las salidas con el checker de 42.
+- COMB_ALL_TESTS: Combinaciones de N números. Se imprimen los resultados de cada combinación.
+- COMB_STAT_TESTS: Combinaciones de de N números. Se imprimen las estadísticas globales.
+- SEQ_TESTS: Secuencias de N números. Se lanza una secuencia en sus formas, creciente y decreciente. Además, las combinaciones de dos secuencias crecientes y decrecientes.
+- RANDOM_TESTS: Repeticiones de series aleatorias de N números.
+
+Se pueden añadir o eliminar pruebas. Cada una de las tuplas definidas en el fichero `config.py` se pueden personalizar modificando algún otro caso que se quiera verificar.
