@@ -4,7 +4,7 @@
 
 1. Clonar el repositorio
 2. Editar el archivo `push-swap-test.py` y modificar la línea 44. Sustituir el valor por la ruta donde se encuentra `push_swap`.
-3. Lanzar en la terminal con `./push-swap-test.sh` o bien `python3 push-swap-test.sh`.
+3. Lanzar en la terminal con `./push-swap-test.py` o bien `python3 push-swap-test.py`.
 
 ## Personalización
 
