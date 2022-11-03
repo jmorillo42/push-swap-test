@@ -110,12 +110,12 @@ def main():
     print(f'{RED}┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛{RESET}')
     print()
     print(f'{WHITE}INPUT/OUTPUT{RESET}')
-    print(f'{GRAY}[OK] push_swap(INPUT) = MOVEMENTS ; ERROR (RETURN_CODE){RESET}')
+    print(f'{GRAY}[OK] push_swap(INPUT) = MOVEMENTS ; STDERR (RETURN_CODE){RESET}')
     print_input_output_tests()
     print()
     print(f'{WHITE}COMBINATIONS OF N NUMBERS{RESET}')
     print(' Show all')
-    print(f'  {GRAY}[OK] push_swap(INPUT) = MOVEMENTS ; ERROR (RETURN_CODE){RESET}')
+    print(f'  {GRAY}[OK] push_swap(INPUT) = MOVEMENTS ; STDERR (RETURN_CODE){RESET}')
     print_all_comb_numbers(3)
     #print_all_comb_numbers(4)
     #print_all_comb_numbers(5)
@@ -150,28 +150,28 @@ def main():
     #print_random_numbers(5000, 2)
     print()
 
-def print_input_output_tests():
+def print_input_output_tests() -> None:
     for numbers in TESTS:
         result, actions, ps_err, ps_code = sort_and_check(numbers)
         print_push_swap_results(numbers, result, actions, ps_err, ps_code)
 
-def print_all_comb_numbers(length):
+def print_all_comb_numbers(length: int) -> None:
     combinations = calc_comb_numbers(length)
     for numbers in combinations:
         result, actions, ps_err, ps_code = sort_and_check(numbers)
         print_push_swap_results(numbers, result, actions, ps_err, ps_code, '  ')
 
-def print_comb_numbers(length):
+def print_comb_numbers(length: int) -> None:
     ok, avgm, minm, maxm, exec_time = sort_and_stats(calc_comb_numbers(length))
     points = evaluation_points(length, [avgm, minm, maxm])
     print(f'  {ok_ko_string(ok)} N={LBLUE}{length}{RESET} --> {CYAN}{avgm:7.2f}{RESET} [{LGREEN}{minm:3d}{RESET} - {LRED}{maxm:3d}{RESET}]  {points}  {BLUE}{exec_time:6.2f}ms{RESET}')
 
-def print_sequence_numbers(length):
+def print_sequence_numbers(length: int) -> None:
     ok, avgm, minm, maxm, exec_time = sort_and_stats(calc_sequence_numbers(length))
     points = evaluation_points(length, [avgm, minm, maxm])
     print(f' {ok_ko_string(ok)} N={LBLUE}{length:3d}{RESET} --> {CYAN}{avgm:7.1f}{RESET} [{LGREEN}{minm:5d}{RESET} - {LRED}{maxm:5d}{RESET}]  {points}  {BLUE}{exec_time:6.2f}ms{RESET}')
 
-def print_random_numbers(length, iterations):
+def print_random_numbers(length: int, iterations: int) -> None:
     ok, avgm, minm, maxm, exec_time = sort_and_stats(calc_random_numbers(length, iterations))
     points = evaluation_points(length, [avgm, minm, maxm])
     print(f' {ok_ko_string(ok)} N={LBLUE}{length:3d}{RESET} (T={LBLUE}{iterations:3d}{RESET}) --> {CYAN}{avgm:7.1f}{RESET} [{LGREEN}{minm:5d}{RESET} - {LRED}{maxm:5d}{RESET}]  {points}  {BLUE}{exec_time:6.2f}ms{RESET}')
@@ -212,7 +212,7 @@ def sort_and_check(numbers: list) -> tuple:
     result = compare_outputs(ps_out, ps_err, chk_out, chk_err)
     return result, count, ps_err, ps_code
 
-def sort_and_stats(numbers_list: list):
+def sort_and_stats(numbers_list: list) -> tuple:
     total_moves = 0
     min_moves = -1
     max_moves = -1
@@ -245,12 +245,12 @@ def ok_ko_string(result: bool) -> str:
     else:
         return f'[{RED}KO{RESET}]'
 
-def calc_comb_numbers(length):
+def calc_comb_numbers(length: int) -> list:
     numbers = list(range(1, length + 1))
     result = [list(n) for n in itertools.permutations(numbers)]
     return result
 
-def calc_sequence_numbers(length):
+def calc_sequence_numbers(length: int) -> list:
     numbers = list(range(1, length + 1))
     result = list()
     result.append(numbers.copy())
@@ -269,7 +269,7 @@ def calc_sequence_numbers(length):
     result.append(des1 + des2)
     return result
 
-def calc_random_numbers(length, count):
+def calc_random_numbers(length: int, count: int) -> list:
     numbers = list(range(1, length + 1))
     result = list()
     while (count):
@@ -343,9 +343,9 @@ def points_500(stats):
 def points_message(points):
     return f'{CYAN}{points[0]}{RESET} [{LGREEN}{points[1]}{RESET}-{LRED}{points[2]}{RESET}]'
 
-# def complexity_estimation(length):
+# def complexity_estimation_message(length: int) -> str:
 #     complex = math.ceil(math.log(length, 2) * length)
-#     return f'{YELLOW}← {BLUE}n·log n{GRAY}={CYAN}{complex}{RESET}'
+#     return f'{GRAY}n·log n={CYAN}{complex}{RESET}'
 
 if __name__ == "__main__":
     main()
