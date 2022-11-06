@@ -40,8 +40,10 @@ RESET = '\033[0m'
 
 COMMAND_NOT_FOUND = 'Error: Command “{}” not found'
 OPSYS_INVALID = 'Error: There is no checker for the operating system “{}”'
-INVALID_OUTPUT = 'The action “{}” is not valid'
-CRASH = 'push_swap terminated unexpectedly: “{}”'
+INVALID_OUTPUT = f'{RED}INVALID OUTPUT "{{}}"{RESET}'
+CRASH = f'{RED}CRASH{RESET}'
+TIMEOUT = f'{RED}TIMEOUT{RESET}'
+MISMATCH = f'{RED}STDERR MISMATCH{RESET}'
 
 if not os.path.exists(PUSH_SWAP):
     print(COMMAND_NOT_FOUND.format(PUSH_SWAP))
@@ -125,19 +127,27 @@ def print_random_numbers(length: int, iterations: int) -> None:
 def sort_numbers(numbers: list) -> tuple:
     numbers = [str(n) for n in numbers]
     ps_command = [PUSH_SWAP] + numbers
-    ps_process = subprocess.run(ps_command, capture_output=True, text=True)
-    ps_output = ps_process.stdout
-    ps_error = ps_process.stderr.strip()
-    ps_rcode = ps_process.returncode
-    if ps_error and ps_error != 'Error':
-        ps_error = CRASH.format(ps_error)
-    action_lines = ps_output.splitlines()
     action_count = 0
-    for line in action_lines:
-        if line in ACTIONS:
-            action_count += 1
+    ps_output = ''
+    ps_rcode = 1
+    try:
+        ps_process = subprocess.run(ps_command, capture_output=True, text=True, timeout=1)
+        ps_output = ps_process.stdout
+        ps_error = ps_process.stderr.strip()
+        ps_rcode = ps_process.returncode
+        if (ps_rcode != 0 or ps_error) and (ps_rcode == 0 or ps_error != 'Error'):
+            ps_error = MISMATCH
         else:
-            ps_error = INVALID_OUTPUT.format(line)
+            action_lines = ps_output.splitlines()
+            for line in action_lines:
+                if line in ACTIONS:
+                    action_count += 1
+                else:
+                    ps_error = INVALID_OUTPUT.format(line)
+    except subprocess.TimeoutExpired:
+        ps_error = TIMEOUT
+    except subprocess.CalledProcessError:
+        ps_error = CRASH
     return action_count, ps_output, ps_error, ps_rcode
 
 def check_actions(numbers: list, actions: str) -> tuple:
@@ -178,12 +188,19 @@ def sort_and_stats(numbers_list: list) -> tuple:
 
 def print_push_swap_results(numbers: list, result:bool, count: int, ps_err: str, ps_code: int, padding='') -> None:
     ok = ok_ko_string(result)
-    numbers = [f'{LBLUE}{n}{RESET}' if isinstance(n, int) else f'{LBLUE}“{n}”{RESET}' for n in numbers]
+    input_numbers = []
+    for n in numbers:
+        if isinstance(n, str):
+            n = f'“{replace_non_printable(n)}”'
+        input_numbers.append(f'{LBLUE}{n}{RESET}')
     count = f'{CYAN}{count}{RESET}'
     ps_err = f'{CYAN}{ps_err if ps_err else "—"}{RESET}'
     ps_code = f'{CYAN}{ps_code}{RESET}'
     sep = f'{GRAY};{RESET}'
-    print(f'{padding}{ok} push_swap({", ".join(numbers)}) = {count} {sep} {ps_err} ({ps_code})')
+    print(f'{padding}{ok} push_swap({", ".join(input_numbers)}) = {count} {sep} {ps_err} ({ps_code})')
+
+def replace_non_printable(text: str) -> str:
+    return "".join([c if ord(c) >= 32 else f"{BLUE}0x{ord(c):02X}{LBLUE}" for c in text])
 
 def ok_ko_string(result: bool) -> str:
     if result:

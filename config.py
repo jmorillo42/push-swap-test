@@ -1,10 +1,11 @@
 
 PUSH_SWAP = '../push-swap/push_swap'
 
+# AVISO: No está implementado el test del bonus. Es indiferente el valor de CHECKER
 CHECKER = '../push-swap/checker'
 
-# 🇪🇸 FORMATO: (<NÚMERO|TEXTO>, <NÚMERO|TEXTO>, ...),
-# 🇪🇸 NOTA: Si la entrada consiste en un único elemento, debe seguirse el formato: (<NUMERO|TEXTO>,),
+# FORMATO: (<NÚMERO|TEXTO>, <NÚMERO|TEXTO>, ...),
+# NOTA: Si la entrada consiste en un único elemento, debe seguirse el formato: (<NUMERO|TEXTO>,),
 INPUT_TESTS=(
     (),
     ('',),
@@ -43,7 +44,11 @@ INPUT_TESTS=(
     ('A',),
     ('FOOBAR',),
     (42, 'FOOBAR'),
-    ('42 FOOBAR'),
+    ('42 FOOBAR',),
+    ('42 0',),
+    ('42\n0',),
+    ('42\r0',),
+    ('42\t0',),
     ('00000000000000000000042', '000000000000000000000'),
     ('+00000000000000000000042', '+000000000000000000000'),
     ('-00000000000000000000000', '-000000000000000000042'),
@@ -58,13 +63,13 @@ INPUT_TESTS=(
     (-17, -13, -11, -7, -5, -3, -2, '-0', 2, 3, 5, 7, 11, 13, 17),
 )
 
-# 🇪🇸 NOTA: No se recomiendan combinaciones de más de 6 números
-COMB_ALL_TESTS = (3, )
+# NOTA: No se recomiendan combinaciones de más de 6 números
+COMB_ALL_TESTS = (3,)
 
-# 🇪🇸 NOTA: No se recomiendan combinaciones de más de 6 números
+# NOTA: No se recomiendan combinaciones de más de 6 números
 COMB_STAT_TESTS = (2, 3, 4, 5)
 
-# 🇪🇸 FORMATO: <NÚMEROS>,
+# FORMATO: <NÚMEROS>,
 SEQ_TESTS = (
     50,
     100,
@@ -72,7 +77,7 @@ SEQ_TESTS = (
     500,
 )
 
-# 🇪🇸 FORMATO: (<NÚMEROS>, <ITERACIONES>),
+# FORMATO: (<NÚMEROS>, <ITERACIONES>),
 RANDOM_TESTS = (
     (6, 80),
     (10, 70),
