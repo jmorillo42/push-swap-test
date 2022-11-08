@@ -149,7 +149,7 @@ CHECKER_TESTS=(
     ((3, 2, '6 5 A', 1), ''),
     ((3, '2 6 ', 5, ' 4 1'), 'ra\npb\nra\nra\nra\npb\npb\nra\nsa\npa\nrrb\npa\npa\n'),
     ((-11, -7, -5, -3, -2, '-0', 2, 3, 5, 7, 11), ''),
-    ((3, 2, 5, 7, 11), 'sa\nra\nrra\n'),
+    ((3, 2, 5, 7, 11), 'sa\nra\nrra\npb\npb\nsb\nsb\nrb\nrrb\npa\npa\n'),
     ((3, 2, 5, 7, 11), 'sa'),
     ((3, 2, 5, 7, 11), 'ra\n'),
     ((3, 2, 5, 7, 11), 'za\n'),
