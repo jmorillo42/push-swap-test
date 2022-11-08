@@ -4,14 +4,14 @@
 
 1. Clonar el repositorio
 2. Editar el archivo `config.py` y modificar la línea 2. Sustituir el valor por la ruta donde se encuentra `push_swap`.
-3. Lanzar en la terminal con `./push-swap-test.py` o bien `python3 push-swap-test.py`.
+3. Lanzar en la terminal con `python3 push-swap-test.py` (o bien `./push-swap-test.py` si tiene el atributo de ejecución).
 
 ## Personalización
 
 En el fichero `config.py` están definidas las constantes que se utilizarán para los tests:
 
 - PUSH_SWAP: Ruta del comando `push_swap`
-- CHECKER: Ruta del comando `checker` (AVISO: no está implementado aún el test del bonus)
+- CHECKER: Ruta del comando `checker`
 - INPUT_TESTS: Colección de pruebas de entrada. Se verifican las salidas con el checker de 42.
 - COMB_ALL_TESTS: Combinaciones de N números. Se imprimen los resultados de cada combinación.
 - COMB_STAT_TESTS: Combinaciones de de N números. Se imprimen las estadísticas globales.
