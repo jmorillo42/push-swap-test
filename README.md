@@ -17,5 +17,6 @@ En el fichero `config.py` están definidas las constantes que se utilizarán par
 - COMB_STAT_TESTS: Combinaciones de de N números. Se imprimen las estadísticas globales.
 - SEQ_TESTS: Secuencias de N números. Se lanza una secuencia en sus formas, creciente y decreciente. Además, las combinaciones de dos secuencias crecientes y decrecientes.
 - RANDOM_TESTS: Repeticiones de series aleatorias de N números.
+- CHECKER_TESTS: Colección de pruebas del `checker`. Se comparan resultados con el checker de 42.
 
 Se pueden añadir o eliminar pruebas. Cada una de las tuplas definidas en el fichero `config.py` se pueden personalizar modificando algún otro caso que se quiera verificar.
