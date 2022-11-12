@@ -8,7 +8,7 @@
 #    By: jmorillo <jmorillo@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/08/16 15:14:35 by jmorillo          #+#    #+#              #
-#    Updated: 2022/11/03 09:25:34 by jmorillo         ###   ########.fr        #
+#    Updated: 2022/11/12 17:50:07 by jmorillo         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -16,6 +16,7 @@ import itertools
 import math
 import os
 import random
+import signal
 import subprocess
 import sys
 import time
@@ -44,6 +45,8 @@ INVALID_OUTPUT = f'{RED}INVALID OUTPUT "{{}}"{RESET}'
 CRASH = f'{RED}CRASH{RESET}'
 TIMEOUT = f'{RED}TIMEOUT{RESET}'
 MISMATCH = f'{RED}MISMATCH:"{YELLOW}{{}}{RED}"{RESET}'
+SEGFAULT = f'{RED}SEGFAULT{RESET}'
+BUSERROR = f'{RED}BUS{RESET}'
 
 if not os.path.exists(PUSH_SWAP):
     print(COMMAND_NOT_FOUND.format(PUSH_SWAP))
@@ -158,7 +161,11 @@ def sort_numbers(numbers: tuple) -> tuple:
         ps_output = ps_process.stdout
         ps_error = ps_process.stderr
         ps_rcode = ps_process.returncode
-        if (ps_rcode != 0 or ps_error) and (ps_rcode == 0 or ps_error != 'Error\n'):
+        if -ps_rcode == signal.SIGSEGV:
+            ps_error = SEGFAULT
+        elif -ps_rcode == signal.SIGBUS:
+            ps_error = BUSERROR
+        elif (ps_rcode != 0 or ps_error) and (ps_rcode == 0 or ps_error != 'Error\n'):
             ps_error = MISMATCH.format(ps_error)
         else:
             action_lines = ps_output.splitlines()
@@ -194,6 +201,10 @@ def check_numbers_and_actions(numbers: tuple, actions: str) -> tuple:
         chk_output = chk_process.stdout
         chk_error = chk_process.stderr
         chk_rcode = chk_process.returncode
+        if -chk_rcode == signal.SIGSEGV:
+            chk_error = SEGFAULT
+        elif -chk_rcode == signal.SIGBUS:
+            chk_error = BUSERROR
     except subprocess.TimeoutExpired:
         chk_error = TIMEOUT
     except subprocess.CalledProcessError as ex:
