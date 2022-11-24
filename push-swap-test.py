@@ -191,7 +191,7 @@ def check_actions(numbers: tuple, actions: str) -> tuple:
     return chk_output, chk_error, chk_rcode
 
 def compare_outputs(ps_out, ps_err, chk_out, chk_err) -> bool:
-    return (chk_out == 'OK' and not ps_err) or (chk_err == ps_err and chk_err in ('', 'Error\n'))
+    return chk_out != 'KO\n' and ((chk_out == 'OK\n' and not ps_err) or (chk_err == ps_err and chk_err in ('', 'Error\n')))
 
 def check_numbers_and_actions(numbers: tuple, actions: str) -> tuple:
     numbers = [str(n) for n in numbers]
