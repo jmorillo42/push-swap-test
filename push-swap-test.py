@@ -1,17 +1,5 @@
 #!/usr/bin/env python3
 
-# **************************************************************************** #
-#                                                                              #
-#                                                         :::      ::::::::    #
-#    push-swap-test.py                                  :+:      :+:    :+:    #
-#                                                     +:+ +:+         +:+      #
-#    By: jmorillo <jmorillo@student.42.fr>          +#+  +:+       +#+         #
-#                                                 +#+#+#+#+#+   +#+            #
-#    Created: 2022/08/16 15:14:35 by jmorillo          #+#    #+#              #
-#    Updated: 2022/11/12 17:50:07 by jmorillo         ###   ########.fr        #
-#                                                                              #
-# **************************************************************************** #
-
 import itertools
 import math
 import os
@@ -36,8 +24,7 @@ GRAY = '\033[1;30m'
 WHITE = '\033[1;37m'
 RESET = '\033[0m'
 
-#print(f'{YELLOW}Tests {LRED}closed{YELLOW} due to renovations{RESET}')
-#exit(0)
+UPDATED = '2022-12-01 13:43'
 
 COMMAND_NOT_FOUND = f'{RED}Error: Command “{YELLOW}{{}}{RED}” not found{RESET}'
 OPSYS_INVALID = 'Error: There is no checker for the operating system “{}”'
@@ -47,10 +34,6 @@ TIMEOUT = f'{RED}TIMEOUT{RESET}'
 MISMATCH = f'{RED}MISMATCH:"{YELLOW}{{}}{RED}"{RESET}'
 SEGFAULT = f'{RED}SEGFAULT{RESET}'
 BUSERROR = f'{RED}BUS{RESET}'
-
-if not os.path.exists(PUSH_SWAP):
-    print(COMMAND_NOT_FOUND.format(PUSH_SWAP))
-    exit(1)
 
 if os.uname().sysname == 'Darwin':
     CHECKER_42 = './checker_Mac'
@@ -69,9 +52,25 @@ BONUS = os.path.exists(CHECKER)
 ACTIONS = ('pa', 'pb', 'ra', 'rb', 'rr', 'rra', 'rrb', 'rrr', 'sa', 'sb', 'ss')
 
 def main():
-    print(f'{RED}┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓{RESET}')
-    print(f'{RED}┃  {YELLOW}Tests for push-swap project{RESET}  {RED}┃{RESET}')
-    print(f'{RED}┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛{RESET}')
+    BOX = WHITE
+    LOGO = GRAY
+    print(f'{BOX}┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓{RESET}')
+    print(f'{BOX}┃                                                                              {BOX}┃{RESET}')
+    print(f'{BOX}┃                                                         {LOGO}:::      ::::::::    {BOX}┃{RESET}')
+    print(f'{BOX}┃    {LGREEN}PUSH-SWAP TESTS                                    {LOGO}:+:      :+:    :+:    {BOX}┃{RESET}')
+    print(f'{BOX}┃                                                     {LOGO}+:+ +:+         +:+      {BOX}┃{RESET}')
+    print(f'{BOX}┃    {LGREEN}By: jmorillo <jmorillo@student.42.fr>          {LOGO}+#+  +:+       +#+         {BOX}┃{RESET}')
+    print(f'{BOX}┃                                                 {LOGO}+#+#+#+#+#+   +#+            {BOX}┃{RESET}')
+    print(f'{BOX}┃    {GREEN}Created: 2022-08-16 15:14                         {LOGO}#+#    #+#              {BOX}┃{RESET}')
+    print(f'{BOX}┃    {GREEN}Updated: {UPDATED:16}                        {LOGO}###   ########.fr        {BOX}┃{RESET}')
+    print(f'{BOX}┃                                                                              ┃{RESET}')
+    print(f'{BOX}┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛{RESET}')
+    print()
+
+    if not os.path.exists(PUSH_SWAP):
+        print(COMMAND_NOT_FOUND.format(PUSH_SWAP))
+        exit(1)
+
     print()
     print(f'{WHITE}INPUT/OUTPUT{RESET}')
     print(f' {GRAY}[OK] push_swap(INPUT) = MOVEMENTS ; STDERR (RETURN_CODE){RESET}')
