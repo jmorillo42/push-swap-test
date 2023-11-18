@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 import itertools
+import logging
 import math
 import os
 import random
@@ -66,6 +67,8 @@ def main():
     print(f'{BOX}┃                                                                              ┃{RESET}')
     print(f'{BOX}┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛{RESET}')
     print()
+
+    logging.basicConfig(filename='push-swap.log',format='[%(asctime)s] %(message)s', level=logging.INFO)
 
     if not os.path.exists(PUSH_SWAP):
         print(COMMAND_NOT_FOUND.format(PUSH_SWAP))
@@ -228,6 +231,7 @@ def sort_and_stats(numbers_list: list) -> tuple:
     for numbers in numbers_list:
         result, count, ps_err, ps_code = sort_and_check(numbers)
         if not result:
+            logging.info(f'Error output: {ps_output} ; Error code: {ps_code} ; Numbers: {numbers}')
             break
         total_moves += count
         if count > max_moves:
